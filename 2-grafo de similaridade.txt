@@ -1,0 +1,10 @@
+// Cria relações de similaridade entre usuários com gostos parecidos
+MATCH (u1:Usuario), (u2:Usuario)
+WHERE id(u1) < id(u2)
+WITH u1, u2,
+     // Pontuação de similaridade
+     CASE WHEN u1.genero_favorito = u2.genero_favorito THEN 1 ELSE 0 END +
+     CASE WHEN u1.artista_favorito = u2.artista_favorito THEN 2 ELSE 0 END AS score
+WHERE score > 0
+CREATE (u1)-[:PARECIDO_COM {peso: score}]->(u2),
+       (u2)-[:PARECIDO_COM {peso: score}]->(u1);

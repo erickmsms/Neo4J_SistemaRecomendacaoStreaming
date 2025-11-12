@@ -1,0 +1,15 @@
+// Cria um grafo projetado para análise
+CALL gds.graph.project(
+  'usuarios_similares',
+  'Usuario',
+  {
+    PARECIDO_COM: {
+      type: 'PARECIDO_COM',
+      properties: 'peso',
+      orientation: 'UNDIRECTED'
+    }
+  }
+);
+
+// Executa o algoritmo de detecção de comunidades Louvain
+CALL gds.louvain.write('usuarios_similares', { writeProperty: 'comunidadeId' });

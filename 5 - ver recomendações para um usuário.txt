@@ -1,0 +1,7 @@
+MATCH (u:Usuario {nome: 'Erick'})
+MATCH (outros:Usuario)
+WHERE outros.comunidadeId = u.comunidadeId AND outros <> u
+MATCH (outros)-[:OUVE]->(musica:Musica)
+WHERE NOT (u)-[:OUVE]->(musica)
+RETURN DISTINCT musica.titulo AS Recomendacao, musica
+LIMIT 10;

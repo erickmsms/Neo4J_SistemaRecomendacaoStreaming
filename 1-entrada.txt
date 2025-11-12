@@ -1,0 +1,109 @@
+// Limpar o banco (opcional, apenas se quiser começar do zero)
+MATCH (n) DETACH DELETE n;
+
+// Criar usuários
+CREATE 
+(u1:Usuario {nome: 'Erick', genero_favorito: 'Rock', artista_favorito: 'Queen', musica_favorita: 'Bohemian Rhapsody'}),
+(u2:Usuario {nome: 'Vitoria', genero_favorito: 'Pop', artista_favorito: 'Taylor Swift', musica_favorita: 'Love Story'}),
+(u3:Usuario {nome: 'Nelson', genero_favorito: 'Rock', artista_favorito: 'Nirvana', musica_favorita: 'Smells Like Teen Spirit'}),
+(u4:Usuario {nome: 'Rafaela', genero_favorito: 'Pop', artista_favorito: 'Ariana Grande', musica_favorita: '7 Rings'}),
+(u5:Usuario {nome: 'Lucas', genero_favorito: 'Rock', artista_favorito: 'AC/DC', musica_favorita: 'Back in Black'}),
+(u6:Usuario {nome: 'Amanda', genero_favorito: 'Pop', artista_favorito: 'Dua Lipa', musica_favorita: 'Levitating'}),
+(u7:Usuario {nome: 'Carlos', genero_favorito: 'Rock', artista_favorito: 'Metallica', musica_favorita: 'Enter Sandman'}),
+(u8:Usuario {nome: 'Julia', genero_favorito: 'Pop', artista_favorito: 'Billie Eilish', musica_favorita: 'Bad Guy'}),
+(u9:Usuario {nome: 'Thiago', genero_favorito: 'Rock', artista_favorito: 'Linkin Park', musica_favorita: 'In the End'}),
+(u10:Usuario {nome: 'Beatriz', genero_favorito: 'Pop', artista_favorito: 'Ed Sheeran', musica_favorita: 'Shape of You'});
+
+// Criar gêneros
+CREATE (g1:Genero {nome: 'Rock'}),
+       (g2:Genero {nome: 'Pop'});
+
+// Criar artistas
+CREATE 
+(a1:Artista {nome: 'Queen'}),
+(a2:Artista {nome: 'Nirvana'}),
+(a3:Artista {nome: 'Taylor Swift'}),
+(a4:Artista {nome: 'Ariana Grande'}),
+(a5:Artista {nome: 'AC/DC'}),
+(a6:Artista {nome: 'Metallica'}),
+(a7:Artista {nome: 'Linkin Park'}),
+(a8:Artista {nome: 'Dua Lipa'}),
+(a9:Artista {nome: 'Billie Eilish'}),
+(a10:Artista {nome: 'Ed Sheeran'});
+
+// Criar músicas
+CREATE 
+(m1:Musica {titulo: 'Bohemian Rhapsody'}),
+(m2:Musica {titulo: 'Smells Like Teen Spirit'}),
+(m3:Musica {titulo: 'Love Story'}),
+(m4:Musica {titulo: '7 Rings'}),
+(m5:Musica {titulo: 'Back in Black'}),
+(m6:Musica {titulo: 'Enter Sandman'}),
+(m7:Musica {titulo: 'In the End'}),
+(m8:Musica {titulo: 'Levitating'}),
+(m9:Musica {titulo: 'Bad Guy'}),
+(m10:Musica {titulo: 'Shape of You'});
+
+// Relacionar músicas com artistas e gêneros
+MATCH (g1:Genero {nome:'Rock'}), (g2:Genero {nome:'Pop'})
+WITH g1, g2
+MATCH (a1:Artista {nome:'Queen'}), (m1:Musica {titulo:'Bohemian Rhapsody'})
+CREATE (m1)-[:PERTENCE_AO_GENERO]->(g1), (m1)-[:DE_ARTISTA]->(a1);
+
+MATCH (a2:Artista {nome:'Nirvana'}), (m2:Musica {titulo:'Smells Like Teen Spirit'}), (g1:Genero {nome:'Rock'})
+CREATE (m2)-[:PERTENCE_AO_GENERO]->(g1), (m2)-[:DE_ARTISTA]->(a2);
+
+MATCH (a3:Artista {nome:'Taylor Swift'}), (m3:Musica {titulo:'Love Story'}), (g2:Genero {nome:'Pop'})
+CREATE (m3)-[:PERTENCE_AO_GENERO]->(g2), (m3)-[:DE_ARTISTA]->(a3);
+
+MATCH (a4:Artista {nome:'Ariana Grande'}), (m4:Musica {titulo:'7 Rings'}), (g2:Genero {nome:'Pop'})
+CREATE (m4)-[:PERTENCE_AO_GENERO]->(g2), (m4)-[:DE_ARTISTA]->(a4);
+
+MATCH (a5:Artista {nome:'AC/DC'}), (m5:Musica {titulo:'Back in Black'}), (g1:Genero {nome:'Rock'})
+CREATE (m5)-[:PERTENCE_AO_GENERO]->(g1), (m5)-[:DE_ARTISTA]->(a5);
+
+MATCH (a6:Artista {nome:'Metallica'}), (m6:Musica {titulo:'Enter Sandman'}), (g1:Genero {nome:'Rock'})
+CREATE (m6)-[:PERTENCE_AO_GENERO]->(g1), (m6)-[:DE_ARTISTA]->(a6);
+
+MATCH (a7:Artista {nome:'Linkin Park'}), (m7:Musica {titulo:'In the End'}), (g1:Genero {nome:'Rock'})
+CREATE (m7)-[:PERTENCE_AO_GENERO]->(g1), (m7)-[:DE_ARTISTA]->(a7);
+
+MATCH (a8:Artista {nome:'Dua Lipa'}), (m8:Musica {titulo:'Levitating'}), (g2:Genero {nome:'Pop'})
+CREATE (m8)-[:PERTENCE_AO_GENERO]->(g2), (m8)-[:DE_ARTISTA]->(a8);
+
+MATCH (a9:Artista {nome:'Billie Eilish'}), (m9:Musica {titulo:'Bad Guy'}), (g2:Genero {nome:'Pop'})
+CREATE (m9)-[:PERTENCE_AO_GENERO]->(g2), (m9)-[:DE_ARTISTA]->(a9);
+
+MATCH (a10:Artista {nome:'Ed Sheeran'}), (m10:Musica {titulo:'Shape of You'}), (g2:Genero {nome:'Pop'})
+CREATE (m10)-[:PERTENCE_AO_GENERO]->(g2), (m10)-[:DE_ARTISTA]->(a10);
+
+// Relacionar usuários com seus gostos
+MATCH (u1:Usuario {nome:'Erick'}), (g1:Genero {nome:'Rock'}), (a1:Artista {nome:'Queen'}), (m1:Musica {titulo:'Bohemian Rhapsody'})
+CREATE (u1)-[:GOSTA_DE_GENERO]->(g1), (u1)-[:GOSTA_DE_ARTISTA]->(a1), (u1)-[:OUVE]->(m1);
+
+MATCH (u2:Usuario {nome:'Vitoria'}), (g2:Genero {nome:'Pop'}), (a3:Artista {nome:'Taylor Swift'}), (m3:Musica {titulo:'Love Story'})
+CREATE (u2)-[:GOSTA_DE_GENERO]->(g2), (u2)-[:GOSTA_DE_ARTISTA]->(a3), (u2)-[:OUVE]->(m3);
+
+MATCH (u3:Usuario {nome:'Nelson'}), (g1:Genero {nome:'Rock'}), (a2:Artista {nome:'Nirvana'}), (m2:Musica {titulo:'Smells Like Teen Spirit'})
+CREATE (u3)-[:GOSTA_DE_GENERO]->(g1), (u3)-[:GOSTA_DE_ARTISTA]->(a2), (u3)-[:OUVE]->(m2);
+
+MATCH (u4:Usuario {nome:'Rafaela'}), (g2:Genero {nome:'Pop'}), (a4:Artista {nome:'Ariana Grande'}), (m4:Musica {titulo:'7 Rings'})
+CREATE (u4)-[:GOSTA_DE_GENERO]->(g2), (u4)-[:GOSTA_DE_ARTISTA]->(a4), (u4)-[:OUVE]->(m4);
+
+MATCH (u5:Usuario {nome:'Lucas'}), (g1:Genero {nome:'Rock'}), (a5:Artista {nome:'AC/DC'}), (m5:Musica {titulo:'Back in Black'})
+CREATE (u5)-[:GOSTA_DE_GENERO]->(g1), (u5)-[:GOSTA_DE_ARTISTA]->(a5), (u5)-[:OUVE]->(m5);
+
+MATCH (u6:Usuario {nome:'Amanda'}), (g2:Genero {nome:'Pop'}), (a8:Artista {nome:'Dua Lipa'}), (m8:Musica {titulo:'Levitating'})
+CREATE (u6)-[:GOSTA_DE_GENERO]->(g2), (u6)-[:GOSTA_DE_ARTISTA]->(a8), (u6)-[:OUVE]->(m8);
+
+MATCH (u7:Usuario {nome:'Carlos'}), (g1:Genero {nome:'Rock'}), (a6:Artista {nome:'Metallica'}), (m6:Musica {titulo:'Enter Sandman'})
+CREATE (u7)-[:GOSTA_DE_GENERO]->(g1), (u7)-[:GOSTA_DE_ARTISTA]->(a6), (u7)-[:OUVE]->(m6);
+
+MATCH (u8:Usuario {nome:'Julia'}), (g2:Genero {nome:'Pop'}), (a9:Artista {nome:'Billie Eilish'}), (m9:Musica {titulo:'Bad Guy'})
+CREATE (u8)-[:GOSTA_DE_GENERO]->(g2), (u8)-[:GOSTA_DE_ARTISTA]->(a9), (u8)-[:OUVE]->(m9);
+
+MATCH (u9:Usuario {nome:'Thiago'}), (g1:Genero {nome:'Rock'}), (a7:Artista {nome:'Linkin Park'}), (m7:Musica {titulo:'In the End'})
+CREATE (u9)-[:GOSTA_DE_GENERO]->(g1), (u9)-[:GOSTA_DE_ARTISTA]->(a7), (u9)-[:OUVE]->(m7);
+
+MATCH (u10:Usuario {nome:'Beatriz'}), (g2:Genero {nome:'Pop'}), (a10:Artista {nome:'Ed Sheeran'}), (m10:Musica {titulo:'Shape of You'})
+CREATE (u10)-[:GOSTA_DE_GENERO]->(g2), (u10)-[:GOSTA_DE_ARTISTA]->(a10), (u10)-[:OUVE]->(m10);
